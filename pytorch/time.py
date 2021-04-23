@@ -51,9 +51,9 @@ if __name__ == "__main__":
     if args.compiler == 'jit':
         from torch.utils.cpp_extension import load
         cuda_module = load(name="add2",
-                           extra_include_paths=["/content/cuda-course-project-master/include"],
-                           sources=["/content/cuda-course-project-master/pytorch/add2_ops.cpp",
-                                    "/content/cuda-course-project-master/kernel/add2_kernel.cu"],
+                           extra_include_paths=["/content/cuda-course-project-colab/include"],
+                           sources=["/content/cuda-course-project-colab/pytorch/add2_ops.cpp",
+                                    "/content/cuda-course-project-colab/kernel/add2_kernel.cu"],
                            verbose=True)
     elif args.compiler == 'setup':
         import add2
