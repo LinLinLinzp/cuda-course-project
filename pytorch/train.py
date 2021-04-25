@@ -54,10 +54,10 @@ if __name__ == "__main__":
                         #    extra_include_paths=["/content/cuda-course-project-colab/include"],
                         #    sources=["/content/cuda-course-project-colab/pytorch/add2_ops.cpp",
                                     # "/content/cuda-course-project-colab/kernel/add2_kernel.cu"],
-                           extra_include_paths=[os.path.join(args.root,"include")],
-                           sources=[os.path.join(args.root,"pytorch/add2_ops.cpp"),
+                            extra_include_paths=[os.path.join(args.root,"include")],
+                            sources=[os.path.join(args.root,"pytorch/add2_ops.cpp"),
                                     os.path.join(args.root,"kernel/add2_kernel.cu")],
-                           verbose=True)
+                            verbose=True)
     elif args.compiler == 'setup':
         import add2
     elif args.compiler == 'cmake':
