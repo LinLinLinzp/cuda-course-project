@@ -1,4 +1,4 @@
-__global__ void add_kernel(float* c,
+__global__ void fc_kernel(float* c,
                             const float* a,
                             const float* b,
                             int n) {
@@ -8,11 +8,11 @@ __global__ void add_kernel(float* c,
     }
 }
 
-void launch_add(float* c,
+void launch_fc(float* c,
                  const float* a,
                  const float* b,
                  int n) {
     dim3 grid((n + 1023) / 1024);
     dim3 block(1024);
-    add2_kernel<<<grid, block>>>(c, a, b, n);
+    fc_kernel<<<grid, block>>>(c, a, b, n);
 }
