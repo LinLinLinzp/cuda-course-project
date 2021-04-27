@@ -3,6 +3,8 @@ import argparse
 import numpy as np
 import torch
 
+import os
+
 # c = a + b (shape: [n])
 n = 1024 * 1024
 a = torch.rand(n, device="cuda:0")
@@ -46,14 +48,19 @@ def run_torch():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--compiler', type=str, choices=['jit', 'setup', 'cmake'], default='jit')
+    parser.add_argument('--root', type=str, default='')
     args = parser.parse_args()
 
     if args.compiler == 'jit':
         from torch.utils.cpp_extension import load
         cuda_module = load(name="add2",
-                           extra_include_paths=["include"],
-                           sources=["pytorch/add2_ops.cpp", "kernel/add2_kernel.cu"],
-                           verbose=True)
+                        #    extra_include_paths=["/content/cuda-course-project-colab/include"],
+                        #    sources=["/content/cuda-course-project-colab/pytorch/add2_ops.cpp",
+                                    # "/content/cuda-course-project-colab/kernel/add2_kernel.cu"],
+                            extra_include_paths=[os.path.join(args.root,"include")],
+                            sources=[os.path.join(args.root,"pytorch/add2_ops.cpp"),
+                                    os.path.join(args.root,"kernel/add2_kernel.cu")],
+                            verbose=True)
     elif args.compiler == 'setup':
         import add2
     elif args.compiler == 'cmake':

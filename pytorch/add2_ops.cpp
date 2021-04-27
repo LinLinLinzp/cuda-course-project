@@ -17,6 +17,6 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
           "add2 kernel warpper");
 }
 
-TORCH_LIBRARY(add2, m) {
-    m.def("torch_launch_add2", torch_launch_add2);
-}
+// TORCH_LIBRARY(add2, m) {
+//     m.def("torch_launch_add2", torch_launch_add2);
+// }
