@@ -28,12 +28,12 @@ void launch_leakyrelu(float* output_y,
                         int dim_xw,
                         int dim_xh
                     ){
-    int num_element = dim_xw * dim_wh;
+    int num_element = dim_xw * dim_xh;
 
     dim3 gridSize((num_element+1023)/1024);
     dim3 blockSize(1024);
 
-    leakyrelu_kernel<<gridSize, blockSize>>(output_y, \
+    leakyrelu_kernel<<<gridSize, blockSize>>>(output_y, \
                                             input_X, \
                                             slope, \
                                             dim_xw,\
