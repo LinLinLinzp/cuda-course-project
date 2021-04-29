@@ -3,14 +3,14 @@
 
 void torch_launch_leakyrelu(torch::Tensor &output_y,
                             torch::Tensor &input_x,
-                            int slope,
+                            float slope,
                             int dim_xw,
                             int dim_xh){
-    launch_leakyrelu((float *)ouput_y.data_ptr(),
+    launch_leakyrelu((float *)output_y.data_ptr(),
                     (float *)input_x.data_ptr(),
                     slope,
                     dim_xw,
-                    dim_wh);
+                    dim_xh);
 
 }
 
