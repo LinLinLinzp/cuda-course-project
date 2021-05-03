@@ -3,20 +3,22 @@ __global__ void leakyrelu_kernel(float* output,
                                 float slope,
                                 int dim_xw,
                                 int dim_xh){
-    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+
     int tid = threadIdx.x;
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
 
     __shared__ float input_s[1024];
 
-    if(tid < 1024){
+    // if(tid < 1024){
+    if(idx < dim_xw *dim_xh){
         input_s[tid] = input[idx];
     }
 
-    if(idx < dim_xw *dim_xh){
-        input_s[idx] = fmaxf(0,input_s[idx]) + slope * fminf(0,input_s[idx]);
+    if(tid < 1024){
+        input_s[tid] = fmaxf(0,input_s[tid]) + slope * fminf(0,input_s[tid]);
     }
 
-    if(tid < 1024){
+    if(idx < dim_xw *dim_xh){
         output[idx] = input_s[tid];
     }
 
