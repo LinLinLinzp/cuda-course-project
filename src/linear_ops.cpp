@@ -10,8 +10,8 @@ void torch_launch_linear(torch::Tensor &device_y,
                         int input_dim_wh
 ){
     launch_linear((float *)device_y.data_ptr(),
-                  (const float*)input_x.data_ptr(),
-                  (const float*)input_w.data_prt(),
+                  (const float *)input_x.data_ptr(),
+                  (const float *)input_w.data_ptr(),
                     input_dim_xw,
                     input_dim_xh,
                     input_dim_ww,
