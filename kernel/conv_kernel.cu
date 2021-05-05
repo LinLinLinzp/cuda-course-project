@@ -13,7 +13,7 @@ __global__ void conv_kernel(float* Y,
     // Y: [1, 128, 7, 7]
     // batch x out_channels x kernel_size x kernel_size
     
-    int batch,out,h,w,in_channel_size;
+    int batch,out,h,w,in_channel_size,X_base;
 
     batch = blockIdx.x;
     out = blockIdx.y;
@@ -21,24 +21,46 @@ __global__ void conv_kernel(float* Y,
     w = threadIdx.x;
     in_channel_size = in_channels * kernel_size * kernel_size;
 
-    __shared__ float input_map_s[7+4][7+4];
-
-    // load to shared memory
+    // float sum = 0.;
+    // for(int in = 0; in < in_channels; in ++){
+    //     for(int p = 0; p < kernel_size; p++){
+    //         for(int q = 0; q < kernel_size; q++){
+    //             X_idx = batch * in_channel_size + in * kernel_size * kernel_size + h * kernel_size + w;
+    //             W_idx = 
+    //         }
+    //     }
+    // }
     
-
+    __shared__ float shared_X[7+4][7+4];
+    __shared__ float shared_W[5][5];
     
-    float sum = 0.;
-    for (int in = 0; in < in_channels; in++){
-        for(int i = 0; i < kernel_size; i++){
-            for(int j = 0; j < kernel_size; j++){
-                idx_X_start = batch * in_channel_size + in * kernel_size * kernel_size;
-                idx_W_start = out * in_channel_size + in * kernel_size * kernel_size;
-                idx_X = idx_X_start + h * w;
+    // // load to shared memory
+    if(batch < batch_size){ //for each batch, current = 1
+        
+        if(out < out_channels){ //for each out channels
+            for (int in = 0; in < in_channels; in++){
+                X_idx = batch * in_channel_size + in * kernel_size * kernel_size + h * kernel_size + w;
+                W_idx = 
 
-                sum += X[]
             }
+
+            
+            
         }
     }
+    
+    // float sum = 0.;
+    // for (int in = 0; in < in_channels; in++){
+    //     for(int i = 0; i < kernel_size; i++){
+    //         for(int j = 0; j < kernel_size; j++){
+    //             idx_X_start = batch * in_channel_size + in * kernel_size * kernel_size;
+    //             idx_W_start = out * in_channel_size + in * kernel_size * kernel_size;
+    //             idx_X = idx_X_start + h * w;
+
+    //             sum += X[]
+    //         }
+    //     }
+    // }
 
 
 
@@ -83,7 +105,7 @@ void launch_conv(float* Y,
     // for blocksize x,y for output size of feature map
     // since in this task, each feature map is small,
     // just set a const value?
-    dim3 blockSize(7,7,1);
+    dim3 blockSize(7+4,7+4,1);
     // gridsize is for in channels and out channels
     dim3 gridSize(batch_size,out_channels,1);
 
