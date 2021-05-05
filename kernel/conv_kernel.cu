@@ -31,23 +31,23 @@ __global__ void conv_kernel_exp(float* Y,
     //     }
     // }
     
-    __shared__ float shared_X[7+4][7+4];
-    __shared__ float shared_W[5][5];
+    // __shared__ float shared_X[7+4][7+4];
+    // __shared__ float shared_W[5][5];
     
-    // // load to shared memory
-    if(batch < batch_size){ //for each batch, current = 1
+    // // // load to shared memory
+    // if(batch < batch_size){ //for each batch, current = 1
         
-        if(out < out_channels){ //for each out channels
-            for (int in = 0; in < in_channels; in++){
-                X_idx = batch * in_channel_size + in * kernel_size * kernel_size + h * kernel_size + w;
-                W_idx = 
+    //     if(out < out_channels){ //for each out channels
+    //         for (int in = 0; in < in_channels; in++){
+    //             X_idx = batch * in_channel_size + in * kernel_size * kernel_size + h * kernel_size + w;
+    //             W_idx = 
 
-            }
+    //         }
 
             
             
-        }
-    }
+    //     }
+    // }
     
     // float sum = 0.;
     // for (int in = 0; in < in_channels; in++){
@@ -124,6 +124,8 @@ __global__ void conv_kernel(float* Y,
 
     float sum = 0.;
 
+    int X_idx,W_idx,Y_idx;
+
     for(int in = 0; in < in_channels; in++){
         // load W to shared memory
         // just use h_out and w_out
@@ -137,7 +139,7 @@ __global__ void conv_kernel(float* Y,
 
 
         // load X to shared memory
-        if(h_in < feature_size) && (h_in >= 0) && (w_in < feature_size) && (w_in >=0)){
+        if((h_in < feature_size) && (h_in >= 0) && (w_in < feature_size) && (w_in >=0)){
             X_idx = batch * 255 * 7 * 7 + \
                     in * 7 * 7 + \
                     h_out * 7 + w_out;
@@ -156,7 +158,7 @@ __global__ void conv_kernel(float* Y,
         __syncthreads();
         
     }
-    int Y_idx = batch *out_channels *feature_size *feature_size + \
+    Y_idx = batch *out_channels *feature_size *feature_size + \
             out * feature_size *feature_size + \
             h_out * feature_size + w_out;
     Y[Y_idx] = sum;
@@ -177,5 +179,15 @@ void launch_conv(float* Y,
     dim3 blockSize(7+4,7+4,1);
     // gridsize is for in channels and out channels
     dim3 gridSize(batch_size,out_channels,1);
+
+    conv_kernel<<<gridSize, blockSize>>>(Y,
+                                        X,
+                                        W,
+                                        in_channels,
+                                        out_channels,
+                                        kernel_size,
+                                        feature_size,
+                                        batch_size);
+    
 
 }
