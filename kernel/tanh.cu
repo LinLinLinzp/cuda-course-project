@@ -2,8 +2,10 @@ __global__ void tanh_kernel(float* Y,
                             int batch_size,
                             int num){
     int idx = blockIdx.x * blockDim.x + threadIdx.x; 
-    Y[idx] = tanh(Y[idx]);
-    __syncthreads();
+    float tp;
+    // load to register and then do tanh
+    tp = Y[idx];
+    Y[idx] = tanh(tp]);
 }
 
 void launch_tanh(float* Y,
