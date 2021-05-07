@@ -16,11 +16,11 @@ void torch_launch_conv(torch::Tensor &Y,
                 out_channels,
                 kernel_size,
                 feature_size,
-                1);
+                batch_size);
 }
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
-    m.def("conv_launch_linear",
-          &conv_launch_linear,
+    m.def("torch_launch_conv",
+          &torch_launch_conv,
           "conv kernel warpper");
 }
