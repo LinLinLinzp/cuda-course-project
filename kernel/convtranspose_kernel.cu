@@ -45,7 +45,7 @@ __global__ void convtranspose_kernel_1(float *Y,
     // Y: [1, 64, 14, 14]
     // batch x out_channels x feature_size x feature_size
 
-    __shared__ float shared_X[17][17];
+    __shared__ float shared_X[31][31];
     __shared__ float shared_W[4][4];
 
     int batch, out ;
@@ -70,6 +70,9 @@ __global__ void convtranspose_kernel_1(float *Y,
             shared_W[kernel_size - h_out -1][kernel_size - w_out -1] = W[W_idx];
         }
         __syncthreads();
+        
+        //zero init of shared X
+        shared_X[h_out][w_out] =0;
 
         // load X to shared memory
         // extend mapping
@@ -89,8 +92,8 @@ __global__ void convtranspose_kernel_1(float *Y,
                     // have problem boundary check
                     int h_idx = h_out - 1 + p;
                     int w_idx = w_out - 1 + q;
-                    if (h_idx >= 0 && h_idx < feature_size &&
-                        w_idx >= 0 && w_idx < feature_size)
+                    if (h_idx >= 0 && h_idx < feature_size * 2 &&
+                        w_idx >= 0 && w_idx < feature_size * 2)
                     {
                         sum += shared_X[h_idx][w_idx] * shared_W[p][q];
                     }
@@ -98,9 +101,9 @@ __global__ void convtranspose_kernel_1(float *Y,
             }
         __syncthreads();
     }
-    Y_idx = batch * out_channels * feature_size * feature_size +
-            out * feature_size * feature_size +
-            h_out * feature_size + w_out;
+    Y_idx = batch * out_channels * feature_size * feature_size * 4 +
+            out * feature_size * feature_size * 4 +
+            h_out * feature_size * 2 + w_out;
     Y[Y_idx] = sum;
 }
 
