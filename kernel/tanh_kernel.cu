@@ -5,7 +5,7 @@ __global__ void tanh_kernel(float* Y,
     float tp;
     // load to register and then do tanh
     tp = Y[idx];
-    Y[idx] = tanh(tp]);
+    Y[idx] = tanh(tp);
 }
 
 void launch_tanh(float* Y,
