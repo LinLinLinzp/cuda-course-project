@@ -75,7 +75,7 @@ __global__ void convtranspose_kernel_1(float *Y,
         // extend mapping
         if (h_out < feature_size && w_out < feature_size){
             X_idx = batch * in_channels * feature_size *feature_size + \
-                    in * feature_size * feature_size;
+                    in * feature_size * feature_size + \
                     h_out * feature_size + w_out;
             shared_X[2 * h_out + 1][2 *w_out + 1] = X[X_idx];
 

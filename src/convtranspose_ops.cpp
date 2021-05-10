@@ -10,7 +10,7 @@ void torch_launch_convtranspose_1(torch::Tensor &Y,
                                   int feature_size,
                                   int batch_size,
                                   int stride){
-    torch_launch_convtranspose_1((float *)Y.data_ptr(),
+    launch_convtranspose_1((float *)Y.data_ptr(),
                                  (const float *)X.data_ptr(),
                                  (const float *)W.data_ptr(),
                                  in_channels,
