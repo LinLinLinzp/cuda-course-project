@@ -6,7 +6,7 @@ void torch_launch_tanh(torch::Tensor &Y,
                        int num){
     launch_tanh((float *)Y.data_ptr(),
                 batch_size,
-                n);
+                num);
 }
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
