@@ -13,7 +13,7 @@ __global__ void convtranspose_kernel_1(float *Y,
     // W: [128, 64, 4, 4]
     //  in_channel x out_channels x kernel_size x kernel_size
     // Y: [1, 64, 14, 14]
-    // batch x out_channels x feature_size x feature_size
+    // batch x out_channels x feature_size * 2 x feature_size * 2
 
     __shared__ float shared_X[31][31];
     __shared__ float shared_W[4][4];
