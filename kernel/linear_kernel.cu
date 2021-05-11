@@ -31,6 +31,42 @@ __global__ void linear_kernel(float* Y,
     }
 }
 
+__global__ void linear_kernel_1(float* Y,
+                            const float* input_x,
+                            const float* input_w,
+                            int dim_xw,
+                            int dim_xh,
+                            int dim_ww,
+                            int dim_wh
+                            ){
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    int tid = threadIdx.x;
+    int batch = blockIdx.y;
+
+    __shared__ float x_s[16];
+
+    // load
+    if(tid < dim_xw){
+        x_s[tid] = input_x[tid + batch * dim_xw];
+    }
+    __syncthreads();
+
+    float sum = 0.0;
+    // cal sum
+    if(idx < dim_wh){
+        for(int i = 0; i < dim_ww; i++){
+            // sum += x_s[i] * input_w[idx][i];
+            sum += x_s[i] * input_w[idx * dim_ww + i];
+        }
+    }
+    // output
+    if(idx < dim_wh){
+        Y[idx + batch * dim_ww] = sum;
+    }
+}
+
+
+
 void launch_linear(float* device_y,
                     const float* input_x,
                     const float* input_w,
@@ -46,8 +82,8 @@ void launch_linear(float* device_y,
     // int dimx = (int)(ceil)((float)input_dim_ww / TILE_WIDTH);
     // int dimy = (int)(ceil)((float)input_dim_xh / TILE_WIDTH);
     
-    dim3 gridSize((input_dim_wh+1023)/1024);
-    dim3 blockSize(1024);
+    dim3 gridSize((input_dim_wh+1023)/1024,batch);
+    dim3 blockSize(1024,1);
 
     linear_kernel<<<gridSize, blockSize>>>(device_y, \
                                     input_x, \

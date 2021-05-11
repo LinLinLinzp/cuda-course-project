@@ -1,34 +1,4 @@
-__global__ void convtranspose_kernel(){
 
-    // extern __shared__ float shmem[];
-
-    // float* shared_X = &shmem[];
-    // float* shared_W = &shmem[output_size * output_size];
-
-    // int batch, out ;
-    // batch = blockIdx.x;
-    // out = blockIdx.y;
-
-    // int h_out, w_out;
-    // h_out = threadIdx.x;
-    // w_out = threadIdx.y;
-
-
-
-    
-}
-
-void launch_convtranspose_general(){
-
-    // //each threads correspond to one element 
-    // dim3 blockSize(output_size,output_size,1);
-
-    // dim3 gridSize(batch_size,out_channels,1);
-
-    // size_t shmem_size = sizeof(float) * (output_size * output_size + kernel_size);
-
-
-}
 __global__ void convtranspose_kernel_1(float *Y,
                                         const float *X,
                                         const float *W,
